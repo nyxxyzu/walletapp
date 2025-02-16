@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16.1
+    container_name: walletdb
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=walletdb
+      - POSTGRES_DB=walletdb
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+  walletapp:
+    build: ./
+    image: walletapp-walletapp
+    container_name: walletapp
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/walletdb
+      - SPRING_DATASOURCE_USERNAME=walletdb
+      - SPRING_DATASOURCE_PASSWORD=admin
+
