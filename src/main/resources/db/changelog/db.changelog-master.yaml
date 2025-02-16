@@ -1,0 +1,103 @@
+databaseChangeLog:
+  - changeSet:
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: wallets
+      id: 1
+      author: user
+      changes:
+        - createTable:
+            tableName: wallets
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: balance
+                  type: BIGINT
+              - column:
+                  name: email
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2
+      author: user
+      comment: "Fill the db"
+      changes:
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: username
+                  value: "testuser"
+              - column:
+                  name: email
+                  value: "email@email.com"
+              - column:
+                  name: balance
+                  value: "1000"
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: username
+                  value: "testuser2"
+              - column:
+                  name: email
+                  value: "email2@email.com"
+              - column:
+                  name: balance
+                  value: "2000"
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: username
+                  value: "testuser3"
+              - column:
+                  name: email
+                  value: "email3@email.com"
+              - column:
+                  name: balance
+                  value: "3000"
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: username
+                  value: "testuser4"
+              - column:
+                  name: email
+                  value: "email4@email.com"
+              - column:
+                  name: balance
+                  value: "4000"
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: username
+                  value: "testuser5"
+              - column:
+                  name: email
+                  value: "email5@email.com"
+              - column:
+                  name: balance
+                  value: "5000"
+      rollback:
+        - delete:
+            tableName: wallets
+            where: username in ('testuser', 'testuser2', 'testuser3', 'testuser4', 'testuser5')
